@@ -89,7 +89,32 @@ function configureVectorTracks() {
             return new L.CircleMarker(latlng, {
                 radius: 10
 			})
-				.bindPopup(`${featureProperties.ts}`);
+				.bindPopup(`<b>${featureProperties.ts}</b>
+                            <table style="; border-collapse: collapse; border-color: #D3D3D3;" border="1">
+                            <tbody>
+                            <tr>
+                            <td style="width: 10.4478%;"><b>Alt 1</b></td>
+                            <td style="width: 9.55228%;">${featureProperties.alt1}</td>
+                            <td style="width: 21%;">&nbsp;</td>
+                            </tr>
+                            <tr>
+                            <td style="width: 10.4478%;"><b>Delta</b></td>
+                            <td style="width: 9.55228%;">&nbsp;</td>
+                            <td style="width: 21%;">${featureProperties.delta}</td>
+                            </tr>
+                            <tr>
+                            <td style="width: 10.4478%;"><b>Alt 2</b></td>
+                            <td style="width: 9.55228%;">${featureProperties.alt2}</td>
+                            <td style="width: 21%;">&nbsp;</td>
+                            </tr>
+                            <tr>
+                            <td style="width: 10.4478%;"><b>Distance</b></td>
+                            <td style="width: 9.55228%;">&nbsp;</td>
+                            <td style="width: 21%;">${featureProperties.dist}</td>
+                            </tr>
+                            </tbody>
+                            </table>
+`);
         }
 		//filter: filterByTakeOffLocation
 	});
@@ -152,11 +177,11 @@ function updateVectorTracksStyle(color, opacity) {
 function showHideVectorTracks(show) {
 	if (_layerVectorTracks)
 		if (show) {
-			_layerVectorTracks.addTo(_map)
-		}
+            _layerVectorTracks.addTo(_map);
+        }
 		else {
-			_layerVectorTracks.remove()
-		}
+            _layerVectorTracks.remove();
+        }
 }
 
 /**
@@ -164,7 +189,17 @@ function showHideVectorTracks(show) {
  * @param {any} feature
  */
 function getFeatureProperties(feature) {
-	ts = moment(feature.properties.ts*1000).format('d MMM YYYY - H:mm:ss');
-    return { ts: ts };
+	var ts = moment(feature.properties.ts * 1000).format('d MMM YYYY - H:mm:ss');
+	var alt1 = feature.properties.alt1;
+	var alt2 = feature.properties.alt2;
+	var delta = Math.abs(alt1 - alt2);
+    var dist = feature.properties.dist;
+    return {
+        ts: ts,
+		alt1: alt1,
+		alt2: alt2,
+		delta: delta,
+		dist: dist
+    };
 
 }
