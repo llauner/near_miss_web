@@ -1,0 +1,26 @@
+body {
+  padding: 0;
+  margin: 0;
+}
+
+html, body, #map {
+  height: 100%;
+  font: 10pt "Helvetica Neue", Arial, Helvetica, sans-serif;
+}
+
+.sidebar {
+  top:80px;
+  height: var(--sidebar-height);
+}
+.sidebar-content {
+  overflow: hidden;
+}
+
+.sidebar.collapsed, .sidebar-tabs, .sidebar-tabs > ul {
+  width:35px;
+}
+
+.colorpicker-input-addon {
+  background-color: transparent;
+  border: none;
+}

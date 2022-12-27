@@ -1,0 +1,252 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-166005805-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-166005805-1');
+    </script>
+
+    <meta charset="utf-8" />
+    <title>Near miss</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js" integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew==" crossorigin=""></script>
+
+    <script src="https://unpkg.com/leaflet-canvas-marker@0.2.0"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.3/css/bootstrap.min.css" integrity="sha512-oc9+XSs1H243/FRN9Rw62Fn8EtxjEYWHXRvjS43YtueEewbS6ObfXcJNyohjHqVKFPoXXUxwc+q1K7Dee6vv9g==" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.3/js/bootstrap.bundle.min.js" integrity="sha512-iceXjjbmB2rwoX93Ka6HAHP+B76IY1z0o3h+N1PeDtRSsyeetU3/0QKJqGyPJcX63zysNehggFwMC/bi7dvMig==" crossorigin="anonymous"></script>
+
+    <script src="https://kit.fontawesome.com/e8228d78b3.js" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sidebar-v2@0.4.0/css/leaflet-sidebar.css" integrity="sha256-FIZlRBXnW3JL4Pb7oAW2QNCGAG5uJqYlFbZb9qAKaso=" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/sidebar-v2@0.4.0/js/leaflet-sidebar.js" integrity="sha256-NQzshErvg7W7EhLN0umegsGFdejTaaAWM/vzq1yfSEg=" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
+    <!-- Measuring tool -->
+    <link rel="stylesheet" href="https://ppete2.github.io/Leaflet.PolylineMeasure/Leaflet.PolylineMeasure.css" />
+    <script src="https://ppete2.github.io/Leaflet.PolylineMeasure/Leaflet.PolylineMeasure.js"></script>
+    
+    <script src="https://rawgit.com/mapshakers/leaflet-control-window/master/src/L.Control.Window.js"></script>
+    <link rel="stylesheet" href="https://rawgit.com/mapshakers/leaflet-control-window/master/src/L.Control.Window.css" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-dialog@1.0.5/Leaflet.Dialog.css" integrity="sha256-ytrTCm2VEyrTPr9Fk2o+NP2HOZ2QkQB2ZaOnlUo68D4=" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/leaflet-dialog@1.0.5/Leaflet.Dialog.js" integrity="sha256-sRBJvRjAnJBKpjs96BdSlDB+ZZVaEn/UjA4yFrFMR70=" crossorigin="anonymous"></script>
+
+    <!-- moment js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous"></script>
+    <!-- moment-range -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-range/4.0.2/moment-range.js" integrity="sha512-XKgbGNDruQ4Mgxt7026+YZFOqHY6RsLRrnUJ5SVcbWMibG46pPAC97TJBlgs83N/fqPTR0M89SWYOku6fQPgyw==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.3.2/spin.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.Spin/1.1.2/leaflet.spin.min.js"></script>
+
+    <!-- Zip libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/jszip@3.4.0/dist/jszip.min.js" integrity="sha256-Uktz9Z+RdiKZoEPBkqU9DGKjNVUe9eVSlKB3EMd4uto=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jszip-utils@0.1.0/dist/jszip-utils.min.js" integrity="sha256-5GhqDpPB1bpRluB0hmS7EJkMH+EVyqUP00CvFEksTVw=" crossorigin="anonymous"></script>
+
+    <!--
+    Mandatory in IE 6, 7, 8 and 9.
+    -->
+    <!--[if IE]>
+    <script src="https://cdn.jsdelivr.net/npm/jszip-utils@0.1.0/dist/jszip-utils-ie.min.js" integrity="sha256-yOor9fUsttajkdD0TLmQRraytTF7OIyrNiI/aQH5JO0=" crossorigin="anonymous"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/3.2.0/css/bootstrap-colorpicker.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/3.2.0/js/bootstrap-colorpicker.min.js"></script>
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" integrity="sha512-mSYUmp1HYZDFaVKK//63EcZq4iFWFjxSL+Z3T/aCt4IO9Cejm03q3NKKYN6pFQzY0SBOr8h+eCIAZHPXcpZaNw==" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ==" crossorigin="anonymous"></script>
+
+    <!-- Palette: https://github.com/google/palette.js-->
+    <script src="js/palette.js"></script>
+
+    <!-- Leaflet Vector Grid -->
+    <script type="text/javascript" src="https://unpkg.com/leaflet.vectorgrid@1.2.0"></script>
+
+    <!-- Lodash -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js" integrity="sha512-WFN04846sdKMIP5LKNphMaWzU7YpMyCU245etK3g/2ARYbPK9Ub18eG+ljU96qKRCWh+quCY7yefSmlkQw1ANQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+    <link rel="stylesheet" href="css/application.css">
+    <link rel="stylesheet" href="css/traces.css">
+
+    <script src="js/common.js"></script>
+    <script src="js/application.js"></script>
+    <script src="js/mbtilesTracks.js"></script>
+    <script src="js/vectorTracks.js"></script>
+    <script src="js/measuringTool.js"></script>
+    <script src="js/airports.js"></script>
+
+    <script src="js/takeoffAirportSelection.js"></script>
+
+</head>
+<body>
+
+    <div id="sidebar" class="sidebar collapsed">
+        <!-- Nav tabs -->
+        <div class="sidebar-tabs">
+            <ul role="tablist">
+                <li><a href="#home" role="tab"><i class="fa fa-info"></i></a></li>
+                <li><a href="#layers" role="tab"><i class="fas fa-layer-group"></i></a></li>
+                <li><a href="#settings" role="tab"><i class="fa fa-gear"></i></a></li>
+            </ul>
+        </div>
+
+        <!-- Tab panes -->
+        <div class="sidebar-content">
+            <div class="sidebar-pane" id="home">
+                <h1 class="sidebar-header">
+                    Information
+                    <span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
+                </h1>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="item">Version:</div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div id="target-date" class="item">0.1</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-pane" id="layers">
+                <h1 class="sidebar-header">Layers<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+                <div class="container">
+	                <!-- Airports-->
+                    <div class="row disabled" id="switch-airports-container">
+                        <div class="col-sm-3">
+                            <label class="form-check-label"><input type="checkbox" class="form-check-input" id="chk-airports">Aerodromes</label>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- Settings -->
+            <div class="sidebar-pane" id="settings">
+                <h1 class="sidebar-header">Settings<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+                <div class="container">
+                    <!-- Color Picker -->
+                    <div class="row" id="color-picker-layer-container">
+                        <div class="col-sm-5">
+                            <div class="item">Couleur Traces: </div>
+                        </div>
+                        <div class="col-sm-7">
+                            <div id="color-picker" class="input-group" title="Using input value">
+                                <span class="input-group-append">
+                                    <span class="input-group-text colorpicker-input-addon"><i></i></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Palette picker-->
+                    <div class="row" id="color-picker-layer-container">
+                        <div class="col-sm-5">
+                            <div class="item">Palette Couleurs: </div>
+                        </div>
+                        <div class="col-sm-7">
+
+                            <div class="dropdown">
+                                <div class="btn-group dropright">
+                                    <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-offset="-40,0">
+                                        Rainbow
+                                    </button>
+                                    <ul class="dropdown-menu" id="palette-picker">
+                                        <li><a class="dropdown-item" href="#" data-value="mpn65" data-count="20">Qualitative</a></li>
+                                        <li><a class="dropdown-item" href="#" data-value="tol-rainbow" data-count="20">Rainbow</a></li>
+                                        <li><a class="dropdown-item" href="#" data-value="cb-Spectral" data-count="10">Spectral</a></li>
+                                        <li><a class="dropdown-item" href="#" data-value="tol-sq" data-count="10">Sequential</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Scroll wheel zoom -->
+                    <div class="row" id="scroll-wheel-zoom-container">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <label class="form-check-label"><input type="checkbox" class="form-check-input" id="chk-scroll-wheel-zoom" checked>Scroll wheel zoom</label>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            
+
+            
+
+            </div>
+        </div>
+
+    <div id="map"></div>
+
+    <!--- Clipboard container -->
+    <div class="d-none">
+        <p id="clipboard-content"></p>
+    </div>
+
+
+    <!--- Date Selector-->
+    <div id="date-picker-div" class="d-none">
+        <div id="datepicker" class="input-group date" data-date-format="mm-dd-yyyy">
+            <input class="form-control" type="text" readonly />
+            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+        </div>
+    </div>
+
+</body>
+</html>
+<script src="js/interface.js"></script>
+<script>
+	var _targetYear = null;             // Set to the target year to display year round data
+
+// --- Map related --
+var zoomLevel = 6;
+var maxZoomLevel = 19;
+var center = [47.5, 4.8];
+
+var tracksMetaData = null;
+var _map = null;
+
+// --- Show on startup
+var _isShowAirportsOnStartup = false;
+
+var _statWindow = null;
+
+// --- Tracks ---
+    var _targetDate = null;
+    var _alternativeSource = null;      // Alternative data source for .geojon.zip. Used when displaying custom tracks (other than daily)
+    var _targetAirfield = null;         // Selected airport for tracks
+
+
+  // ---------- Document loaded ----------
+$(function () {
+	setupMap();
+
+	setupVectorTracks();
+    setupAirports();
+
+
+});
+</script>

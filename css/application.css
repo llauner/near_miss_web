@@ -1,0 +1,27 @@
+:root {
+	--sidebar-height: 120px;
+}
+
+.easy-button-container {
+	margin-top: calc(var(--sidebar-height) + 30px) !important;
+}
+
+.btn-group {
+	padding-top: 1px;
+}
+.tooltip {
+	z-index: 2000 !important;
+	}
+
+.popover {
+	z-index: 2000;
+}
+
+.tooltip-inner {
+	max-width: 600px;
+	text-align: left;
+}
+
+.airport-icon {
+	color:#4a4a4a;
+}
