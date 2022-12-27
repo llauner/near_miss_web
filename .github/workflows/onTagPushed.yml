@@ -5,17 +5,16 @@ on:
       - v*
 
   workflow_dispatch:
-    inputs:
-      environment:
-        type: string
-        default: DEV
-        required: false
+
+
+  repository_dispatch:
+    types: [external_push_mbtiles_created]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout thermal_web
+      - name: Checkout near_miss_web
         uses: actions/checkout@v3
 
       # This part here is cloning a second repository
