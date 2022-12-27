@@ -1,0 +1,17 @@
+.git
+.vs
+.idea
+bin
+obj
+_config.yml
+package.json
+packages.config
+*.sh
+*.csproj
+*.sln
+*.config
+*.user
+*.geojson
+packages
+
+!geojson/openaip-airport.geojson
