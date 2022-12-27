@@ -8,7 +8,7 @@ on:
 
 
   repository_dispatch:
-    types: [external_push_mbtiles_created]
+    types: [external_push_zip_files_created]
 
 jobs:
   build:
