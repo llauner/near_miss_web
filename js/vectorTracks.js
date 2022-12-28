@@ -85,7 +85,10 @@ function configureVectorTracks() {
 		style: setTrackStyleFunction,
 		onEachFeature: onEachFeature,			// Configure action when a track is clicked
 		pointToLayer: function (feature, latlng) {
-            var featureProperties = getFeatureProperties(feature);
+			var featureProperties = getFeatureProperties(feature);
+
+		
+
             return new L.CircleMarker(latlng, {
                 radius: 10
 			})
@@ -114,11 +117,14 @@ function configureVectorTracks() {
                             </tr>
                             </tbody>
                             </table>
-`);
+                            <p>${featureProperties.fid1}</p>
+                            <p>${featureProperties.fid2}</p>
+                            `)
+                //.bindTooltip('some text', { permanent: true })
+                ;
         }
 		//filter: filterByTakeOffLocation
 	});
-
 
     _layerVectorTracks.addTo(_map);
     }
@@ -189,17 +195,22 @@ function showHideVectorTracks(show) {
  * @param {any} feature
  */
 function getFeatureProperties(feature) {
-	var ts = moment(feature.properties.ts * 1000).format('d MMM YYYY - H:mm:ss');
+    var ts = moment(feature.properties.ts * 1000).format('D MMM YYYY - H:mm:ss');
 	var alt1 = feature.properties.alt1;
 	var alt2 = feature.properties.alt2;
 	var delta = Math.abs(alt1 - alt2);
-    var dist = feature.properties.dist;
+	var dist = feature.properties.dist;
+	var fid1 = feature.properties.fid1;
+	var fid2 = feature.properties.fid2;
+
     return {
         ts: ts,
-		alt1: alt1,
-		alt2: alt2,
-		delta: delta,
-		dist: dist
-    };
+        alt1: alt1,
+        alt2: alt2,
+        delta: delta,
+		dist: dist, 
+        fid1: fid1,
+        fid2: fid2
+};
 
 }
