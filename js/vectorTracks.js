@@ -1,8 +1,5 @@
-var _availableTracks = null;            // List of available days
-var _tracksGeojson = null;
-var _layerVectorTracks = null;
-var _selectedDayIndex = null;
-var _selectedDayFilenames = null;
+var _pointsGeojson = null;
+var _layerVectorPoints = null;
 // --- Color palette ---
 var _selectedPalette = "tol-rainbow";		// Current selected color palette name
 var _selectedPaletteCount = 20;				// Number of different colors in the palette
@@ -12,13 +9,13 @@ var _mapboxPbfLayer = null;
 
 var _currentAirportFilterValue = null;
 
-var vectorTracksStyle = {
+var vectorPointsStyle = {
 						"color": "rgba(33, 78, 184)",
 						"weight": 1.5,
 						"opacity": 1
 };
 
-var clickedVectorTracksStyle = {
+var clickedVectorPointsStyle = {
 	"color": "#ff0000",
 	"weight": 5,
 	"opacity": 1
@@ -26,24 +23,24 @@ var clickedVectorTracksStyle = {
 
 
 /**
- * selectTrack
+ * selectPoint
  * @param {any} pickerDate
  */
-function selectTrack() {
+function selectPoint() {
 
-    _tracksGeojson = null;
-	showHideVectorTracks(false);
+    _pointsGeojson = null;
+	showHideVectorPoints(false);
 
-    setupVectorTracks();			// Daily view of geojson tracks
+    setupVectorPoints();			// Daily view of geojson tracks
    
     //setupYearlyMbTiles();			// Yearly view of Mbtiles
 }
 
 /**
- * setupVectorTracks
+ * setupVectorPoints
  *
  */
-function setupVectorTracks() {
+function setupVectorPoints() {
     var zipVectorTracksUrl = NetcoupeTracksDataUrl + "2022_nearmiss.zip";
     _map.spin(true);
         JSZipUtils.getBinaryContent(zipVectorTracksUrl, function(err, data) {
@@ -53,20 +50,19 @@ function setupVectorTracks() {
 			_map.spin(false);
 		}
 		JSZip.loadAsync(data).then(function (zip) {
-			//zip.file(_selectedDayFilenames.VectorGeojsonTracksFileName).async("string")
-			zip.file(Object.values(zip.files)[0].name).async("string")
+            zip.file(Object.values(zip.files)[0].name).async("string")
 			.then(function (data) {
 				if (typeof (data) !== 'object') {
 					data = JSON.parse(data);
 				}
-				_tracksGeojson = data;
-				configureVectorTracks();
+				_pointsGeojson = data;
+				configureVectorPoints();
 				enableTrackSelection();
 				//setupTakeoffAirportSelecttion();
 			})
 			.finally(function() {
 				_map.spin(false);
-				if (!_tracksGeojson) {
+				if (!_pointsGeojson) {
 					console.log(errorThrown);
 					toastr["error"]("Could not load zip Vector Tracks: " + zipVectorTracksUrl);
 				}
@@ -78,21 +74,22 @@ function setupVectorTracks() {
 }
 
 var trackColorIndex = 0;
-function configureVectorTracks() {
+function configureVectorPoints() {
     _palette = palette(_selectedPalette, _selectedPaletteCount);
 
-	_layerVectorTracks = L.geoJSON(_tracksGeojson, {
-		style: setTrackStyleFunction,
+	_layerVectorPoints = L.geoJSON(_pointsGeojson, {
+		style: setPointStyleFunction,
 		onEachFeature: onEachFeature,			// Configure action when a track is clicked
 		pointToLayer: function (feature, latlng) {
 			var featureProperties = getFeatureProperties(feature);
 
-		
+            var circleRadius = 10;
 
-            return new L.CircleMarker(latlng, {
-                radius: 10
-			})
-				.bindPopup(`<b>${featureProperties.ts}</b>
+            return new L.CircleMarker(latlng,
+                    {
+						radius: circleRadius
+                    })
+                .bindPopup(`<b>${featureProperties.ts}</b>
                             <table style="; border-collapse: collapse; border-color: #D3D3D3;" border="1">
                             <tbody>
                             <tr>
@@ -117,22 +114,27 @@ function configureVectorTracks() {
                             </tr>
                             </tbody>
                             </table>
-                            <p>${featureProperties.fid1}</p>
-                            <p>${featureProperties.fid2}</p>
+                            <a href="#displayTracks" class="btn btn-outline-primary btn-sm" role="button" id="bt-show-track" data-fid1=${featureProperties.fid1} data-fid2=${featureProperties.fid2}>Link Button</a>
                             `)
-                //.bindTooltip('some text', { permanent: true })
+                .on('popupopen', function (e) {
+                    // the id of the clicked marker is e.target.id
+                    // retrieve the rating for this id and use it in the rateYo() call
+                    displayTracks();
+                });
                 ;
+            
         }
 		//filter: filterByTakeOffLocation
-	});
+    });
 
-    _layerVectorTracks.addTo(_map);
+
+    _layerVectorPoints.addTo(_map);
     }
 
-setTrackStyleFunction = function (feature) {
+setPointStyleFunction = function (feature) {
 	trackColorIndex++;
-	vectorTracksStyle.color = "#" + _palette[trackColorIndex % _palette.length];
-	return vectorTracksStyle;
+	vectorPointsStyle.color = "#" + _palette[trackColorIndex % _palette.length];
+	return vectorPointsStyle;
 }
 
 var _clickedFeatureOldStyle = null;
@@ -150,43 +152,44 @@ function onEachFeature(feature, layer) {
 			_clickedLayer.setStyle(_clickedFeatureOldStyle);
 		}
 		_clickedLayer = this;
-		_clickedFeatureOldStyle = Object.assign({}, vectorTracksStyle);
+		_clickedFeatureOldStyle = Object.assign({}, vectorPointsStyle);
 		_clickedFeatureOldStyle.color = this.options.color;
 
-		this.setStyle(clickedVectorTracksStyle);
+		this.setStyle(clickedVectorPointsStyle);
+
 	});
 
 }
 
 
-function updateVectorTracksStyle(color, opacity) {
+function updateVectorPointsStyle(color, opacity) {
 	// Solid color
 	if (color && opacity) {
-		vectorTracksStyle.color = color;
-		vectorTracksStyle.opacity = opacity;
-		_layerVectorTracks.setStyle(vectorTracksStyle);
+		vectorPointsStyle.color = color;
+		vectorPointsStyle.opacity = opacity;
+		_layerVectorPoints.setStyle(vectorPointsStyle);
 	}
 	// Palette
 	else {
 		trackColorIndex = 0;
 		_palette = palette(_selectedPalette, _selectedPaletteCount);
-		_layerVectorTracks.setStyle(setTrackStyleFunction);
+		_layerVectorPoints.setStyle(setPointStyleFunction);
 	}
 	
 }
 
 /**
- * showHideVectorTracks
+ * showHideVectorPoints
  *
  * @param {*} isVector
  */
-function showHideVectorTracks(show) {
-	if (_layerVectorTracks)
+function showHideVectorPoints(show) {
+	if (_layerVectorPoints)
 		if (show) {
-            _layerVectorTracks.addTo(_map);
+            _layerVectorPoints.addTo(_map);
         }
 		else {
-            _layerVectorTracks.remove();
+            _layerVectorPoints.remove();
         }
 }
 

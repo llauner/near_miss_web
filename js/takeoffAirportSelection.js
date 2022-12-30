@@ -63,8 +63,8 @@ function getAirportIcao(airportLabel) {
 function startAirportSelectionPostProcessing(isRefresh=false) {
 
     if (!isRefresh) {
-        if (_tracksGeojson &&
-            (_tracksGeojson.features[0].properties.takeoff == undefined || _tracksGeojson.features[0].properties.takeoff == "")) {
+        if (_pointsGeojson &&
+            (_pointsGeojson.features[0].properties.takeoff == undefined || _pointsGeojson.features[0].properties.takeoff == "")) {
             console.log("No takeoff location in file. Finding takeoff location from airports list.")
             assignAirportAndBuildAirportsList();                        // No takeoff location found in geojson
         } else {
@@ -88,8 +88,8 @@ function startAirportSelectionPostProcessing(isRefresh=false) {
 
 function buildUsedAirportsList(usedIcaoCodesArray = null) {
     // Geojson vector track = dayly display
-    if (_tracksGeojson) {
-        var flatMap = _.flatMap(_tracksGeojson.features, 'properties');
+    if (_pointsGeojson) {
+        var flatMap = _.flatMap(_pointsGeojson.features, 'properties');
         var usedIcaoCodes = _.uniqBy(flatMap, 'takeoff');
         var arrIcaoCodes = _.map(usedIcaoCodes, 'takeoff');
 
@@ -115,7 +115,7 @@ function buildUsedAirportsList(usedIcaoCodesArray = null) {
  * Build List of used airports in features
  */
 function assignAirportAndBuildAirportsList() {
-    _tracksGeojson.features.forEach(t => {
+    _pointsGeojson.features.forEach(t => {
         var trackStartingPoint = t.geometry.coordinates[0];
         var takeoffAirportName = null;
         // Look for airports near the takeoff location

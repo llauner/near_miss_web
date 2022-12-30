@@ -1,3 +1,8 @@
+var startZooomLevel = 5;
+var minZoomLevel = 3;
+var maxZoomLevel = 19;
+var center = [47.5, 4.8];
+
 toastr.options = {
     "closeButton": false,
     "debug": false,
@@ -25,13 +30,13 @@ var _mapOptions = {
 
 function setupMap() {
     // Create the map
-    _map = L.map('map', _mapOptions).setView(center, zoomLevel);
+    _map = L.map('map', _mapOptions).setView(center, startZooomLevel);
     var sidebar = L.control.sidebar('sidebar').addTo(_map);
 
     var Thunderforest_Outdoors = L.tileLayer('https://{s}.tile.thunderforest.com/outdoors/{z}/{x}/{y}.png?apikey={apikey}', {
         attribution: '&copy; <a href="http://www.thunderforest.com/">Thunderforest</a>, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         apikey: '45799462d9f6496aba635de79c086ea2',
-        minZoom: zoomLevel,
+        minZoom: minZoomLevel,
         maxZoom: maxZoomLevel,
         subdomains: ['a', 'b', 'c']
     });

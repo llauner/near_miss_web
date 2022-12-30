@@ -1,4 +1,3 @@
-
 // Tracks layer
 var _isVectorTracksLayerSelected = true;
 
@@ -18,7 +17,14 @@ $('#chk-scroll-wheel-zoom').on('change',
 function () {
     var checked = $('#chk-scroll-wheel-zoom').is(':checked');
     updateMapOptions(checked);
-});
+    });
+
+//// Show last 30s tracks when details button clicked
+//$('body').on('click', '#bt-show-track', function () {
+//    var fid1 = $("#bt-show-track").data("fid1");
+//    var fid2 = $("#bt-show-track").data("fid2");
+//    displayTracks(fid1, fid2);
+//});
 
 
 // --- Enable / Disable UI elements ---
@@ -53,7 +59,7 @@ function initToolTip_OpenAipVector(metadata) {
 
 // ---  Color Picker ---
 $('#color-picker').colorpicker({
-    color: vectorTracksStyle.color,
+    color: vectorPointsStyle.color,
     format: "hexa",
     useAlpha: true
 });
@@ -62,7 +68,7 @@ $('#color-picker').on('colorpickerChange', function(event) {
     //$('#color-pciker').css('background-color', event.color.toString());
     var color = event.color.toHexString();
     var alpha = event.color._color.valpha;
-    updateVectorTracksStyle(color, alpha);
+    updateVectorPointsStyle(color, alpha);
 });
 
 // --- Palette dropdown ---
@@ -73,7 +79,7 @@ $(".dropdown li a").on("click", function (event) {
 
     _selectedPalette = $(this).data('value');
     _selectedPaletteCount=parseInt($(this).data('count'));
-    updateVectorTracksStyle(null, null);
+    updateVectorPointsStyle(null, null);
 });
 
 // --- Links ---
@@ -115,9 +121,9 @@ $('#select-airfield').on('change',
 
         console.log(`Filter on takeoff airfield: ${selectedAirfield} - ${_selectableAirportsName[_currentAirportFilterValue - 1]}`)
  
-        showHideVectorTracks(false);
-        configureVectorTracks(true);
-        showHideVectorTracks(true);
+        showHideVectorPoints(false);
+        configureVectorPoints(true);
+        showHideVectorPoints(true);
 
         // ----- MbTiles -----
         if (_mapboxPbfLayer)

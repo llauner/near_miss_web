@@ -89,6 +89,7 @@
     <script src="js/application.js"></script>
     <script src="js/mbtilesTracks.js"></script>
     <script src="js/vectorTracks.js"></script>
+    <script src="js/vectorNearMissTracks.js"></script>
     <script src="js/measuringTool.js"></script>
     <script src="js/airports.js"></script>
 
@@ -222,9 +223,6 @@
 	var _targetYear = null;             // Set to the target year to display year round data
 
 // --- Map related --
-var zoomLevel = 6;
-var maxZoomLevel = 19;
-var center = [47.5, 4.8];
 
 var tracksMetaData = null;
 var _map = null;
@@ -244,8 +242,10 @@ var _statWindow = null;
 $(function () {
 	setupMap();
 
-	setupVectorTracks();
+    setupVectorPoints();
     setupAirports();
+
+    setupVectorTracks();
 
 
 });
