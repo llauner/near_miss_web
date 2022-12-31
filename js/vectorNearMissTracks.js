@@ -3,6 +3,8 @@ var _layerShortTrack1 = null;
 var _layerShortTrack2 = null;
 var trackColorIndex = 0;
 
+var _currentZoom = null;
+
 // --- Color palette ---
 var _selectedPalette = "tol-rainbow";		// Current selected color palette name
 var _selectedPaletteCount = 5;				// Number of different colors in the palette
@@ -51,22 +53,33 @@ function setupVectorTracks() {
  * @param {any} fid1
  * @param {any} fid2
  */
-function displayTracks() {
-    // Get fid
-    var fid1 = $("#bt-show-track").data("fid1");
-    var fid2 = $("#bt-show-track").data("fid2");
-    var pointsToGeoJsonIndex = $("#bt-show-track").data("points-index");
+function displayTracks(fid1, fid2, pointsGeoJsonIndex) {
+    //// Get fid
+    //var fid1 = $("#bt-show-track").data("fid1");
+    //var fid2 = $("#bt-show-track").data("fid2");
+    //var pointsToGeoJsonIndex = $("#bt-show-track").data("points-index");
 
     // Fly to position and zoom
-    var center = _pointsGeojson.features[pointsToGeoJsonIndex].geometry.coordinates[0];
+    var center = _pointsGeojson.features[pointsGeoJsonIndex].geometry.coordinates[0];
     center = [center[1], center[0]];
 
+    _currentZoom = _map.getZoom();
     _map.flyTo(center);
+        //, 13,
+        //{
+        //    animate:false
+        //});
 
     // --- Display tracks
     // Find geojson from both tracks
     var track1 = _.find(_tracksJson, { fid: fid1 });
     var track2 = _.find(_tracksJson, { fid: fid2 });
+
+    if (_layerShortTrack1 != null && _layerShortTrack2 != null)
+    {
+        _map.removeLayer(_layerShortTrack1);
+        _map.removeLayer(_layerShortTrack2);
+    }
 
     _layerShortTrack1 = L.geoJSON(track1.track, {
         style: setTrackStyleFunction

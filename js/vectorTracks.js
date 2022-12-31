@@ -116,12 +116,20 @@ function configureVectorPoints() {
                             </tbody>
                             </table>
                             <div hidden id="bt-show-track" data-fid1=${featureProperties.fid1} data-fid2=${featureProperties.fid2} data-points-index=${featureProperties.pointsGeoJsonIndex}></div>
+                            <a href="#zoomout" role="button" id="bt-zoom-out">
+                                <i class="fa-solid fa-magnifying-glass-minus"></i>
+                            </a>
+                            <div style="float:right">
+                                <a href="#zoomin" role="button" id="bt-zoom-in">
+                                    <i class="fa-solid fa-magnifying-glass-plus"></i>
+                                </a>
+                            </div>
                             `,
 					{
 						offset: [-25, -50]
                     })
                 .on('popupopen', function (e) {
-                    displayTracks();
+					displayTracks(featureProperties.fid1, featureProperties.fid2, featureProperties.pointsGeoJsonIndex );
                 });
                 ;
             

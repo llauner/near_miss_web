@@ -19,12 +19,13 @@ function () {
     updateMapOptions(checked);
     });
 
-//// Show last 30s tracks when details button clicked
-//$('body').on('click', '#bt-show-track', function () {
-//    var fid1 = $("#bt-show-track").data("fid1");
-//    var fid2 = $("#bt-show-track").data("fid2");
-//    displayTracks(fid1, fid2);
-//});
+// Zoom IN to 30s track
+$('body').on('click', '#bt-zoom-in', function () {
+    _map.setZoom(15);
+});
+$('body').on('click', '#bt-zoom-out', function () {
+    _map.setZoom(_currentZoom);
+});
 
 
 // --- Enable / Disable UI elements ---
