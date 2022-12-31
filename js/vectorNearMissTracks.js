@@ -55,7 +55,15 @@ function displayTracks() {
     // Get fid
     var fid1 = $("#bt-show-track").data("fid1");
     var fid2 = $("#bt-show-track").data("fid2");
+    var pointsToGeoJsonIndex = $("#bt-show-track").data("points-index");
 
+    // Fly to position and zoom
+    var center = _pointsGeojson.features[pointsToGeoJsonIndex].geometry.coordinates[0];
+    center = [center[1], center[0]];
+
+    _map.flyTo(center);
+
+    // --- Display tracks
     // Find geojson from both tracks
     var track1 = _.find(_tracksJson, { fid: fid1 });
     var track2 = _.find(_tracksJson, { fid: fid2 });
@@ -70,7 +78,103 @@ function displayTracks() {
   
     _layerShortTrack1.addTo(_map);
     _layerShortTrack2.addTo(_map);
-    
+
+    //// --- Add Animation
+    var polyLine1 = [];
+    var polyLine2 = [];
+    track1.track.coordinates.forEach(c => polyLine1.push([c[1], c[0]]));
+    track2.track.coordinates.forEach(c => polyLine2.push([c[1], c[0]]));
+
+
+    //var line1 = L.polyline(polyLine1);
+    //line1.addTo(_map);
+    //var line2 = L.polyline(polyLine2);
+    //line2.addTo(_map);
+
+    //line1.snakeIn();
+    //line2.snakeIn();
+
+    //line1.remove(_map);
+    //line2.remove(_map);
+
+    //var myIcon = L.icon({
+    //    iconUrl: '/images/glider.png',
+    //    iconSize: [50, 50]
+    //});
+
+
+    //L.motion.polyline(polyLine1, {
+    //    color: "transparent"
+    //}, {
+    //    auto: true,
+    //    duration: 10000,
+    //   // easing: L.Motion.Ease.easeInOutQuart
+    //}, {
+    //    removeOnEnd: true,
+    //    showMarker: true,
+    //    icon: L.divIcon({
+    //        icon: L.divIcon({
+    //            html: "<i class='fa fa-plane fa-2x' aria-hidden='true'  motion-base='-48'></i>",
+    //            iconSize:L.point(19, 24)
+    //        })
+    //    })
+    //}).addTo(_map);
+
+    //L.motion.polyline(polyLine2, {
+    //    color: "transparent"
+    //}, {
+    //    auto: true,
+    //    duration: 10000,
+    //    //easing: L.Motion.Ease.easeInOutQuart
+    //}, {
+    //    removeOnEnd: true,
+    //    showMarker: true,
+    //    icon: L.divIcon({
+    //        html: "<i class='fa fa-plane fa-2x' aria-hidden='true'  motion-base='-48'></i>",
+    //        iconSize: L.point(19, 24)
+    //    })
+    //}).addTo(_map);
+
+
+    //var myIcon = L.icon({
+    //    iconUrl: '/images/glider.png',
+    //    iconSize: [50, 50]
+    //});
+
+
+    //var myMovingMarker1 = L.Marker.movingMarker(polyLine1,
+    //    7000,
+    //    {
+    //        loop: true,
+    //        icon: myIcon
+    //    }).addTo(_map);
+    ////...
+
+
+    //var myMovingMarker2 = L.Marker.movingMarker(polyLine2,
+    //    7000,
+    //    {
+    //        loop: true,
+    //        icon: myIcon
+    //    }).addTo(_map);
+    ////...
+
+
+    //myMovingMarker1.start();
+    //myMovingMarker2.start();
+
+
+    //var line = L.polyline(pl),
+    //    animatedMarker = L.animatedMarker(line.getLatLngs(),
+    //        {
+    //            distance: 1000,
+    //            interval: 500,
+    //            icon: myIcon
+    //        });
+
+    //_map.addLayer(animatedMarker);
+    //animatedMarker.start();
+
 };
 
 setTrackStyleFunction = function (feature) {

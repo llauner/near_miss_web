@@ -1,6 +1,7 @@
 var startZooomLevel = 5;
 var minZoomLevel = 3;
 var maxZoomLevel = 19;
+var trackZoomLevel = 16;
 var center = [47.5, 4.8];
 
 toastr.options = {

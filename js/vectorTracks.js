@@ -77,13 +77,14 @@ var trackColorIndex = 0;
 function configureVectorPoints() {
     _palette = palette(_selectedPalette, _selectedPaletteCount);
 
-	_layerVectorPoints = L.geoJSON(_pointsGeojson, {
+    _layerVectorPoints = L.geoJSON(_pointsGeojson, {
 		style: setPointStyleFunction,
 		onEachFeature: onEachFeature,			// Configure action when a track is clicked
 		pointToLayer: function (feature, latlng) {
 			var featureProperties = getFeatureProperties(feature);
 
             var circleRadius = 10;
+
 
             return new L.CircleMarker(latlng,
                     {
@@ -114,11 +115,12 @@ function configureVectorPoints() {
                             </tr>
                             </tbody>
                             </table>
-                            <a href="#displayTracks" class="btn btn-outline-primary btn-sm" role="button" id="bt-show-track" data-fid1=${featureProperties.fid1} data-fid2=${featureProperties.fid2}>Link Button</a>
-                            `)
+                            <div hidden id="bt-show-track" data-fid1=${featureProperties.fid1} data-fid2=${featureProperties.fid2} data-points-index=${featureProperties.pointsGeoJsonIndex}></div>
+                            `,
+					{
+						offset: [-25, -50]
+                    })
                 .on('popupopen', function (e) {
-                    // the id of the clicked marker is e.target.id
-                    // retrieve the rating for this id and use it in the rateYo() call
                     displayTracks();
                 });
                 ;
@@ -206,6 +208,8 @@ function getFeatureProperties(feature) {
 	var fid1 = feature.properties.fid1;
 	var fid2 = feature.properties.fid2;
 
+    var pointsGeoJsonIndex = _.indexOf(_pointsGeojson.features, feature, 0);
+
     return {
         ts: ts,
         alt1: alt1,
@@ -213,7 +217,8 @@ function getFeatureProperties(feature) {
         delta: delta,
 		dist: dist, 
         fid1: fid1,
-        fid2: fid2
+		fid2: fid2,
+		pointsGeoJsonIndex: pointsGeoJsonIndex
 };
 
 }
