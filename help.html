@@ -1,0 +1,15 @@
+﻿<p>En analysant les vols déposés sur la <a href="https://www.netcoupe.net/" target="_blank">Netcoupe</a> <em><a href="https://en.wikipedia.org/wiki/Near_miss_(safety)" target="_blank"><strong>near-miss</strong></a></em> détecte les situations potentiellement dangereuses.</p>
+<p>Les événements sont représentés sous la forme d'un cercle<img src="/images/1circle.png" alt="" /> (a zoom faible) ou de deux cercles <img src="/images/2circle.png" alt="" /> (a plus haut zoom)</p>
+<p>Un point d'un vol A, et un point d'un vol B constituent un événement, si simultanément: </p>
+<ul>
+	<li><span class="hovertext" data-hover="abs( timestamp(vol1) - timestamp(vol2)) &lt; 2">Timestamp (Date et Heure)la même seconde</span></li>
+	<li><span class="hovertext" data-hover="abs( altitude(vol1) - altitude(vol2) &lt; 10">ET Différence d'altitude de moins de 10m</span></li>
+	<li><span class="hovertext" data-hover="abs( distance(vol1) - distance(vol2) &lt; 10">ET Distance de moins de 10m</span></li>
+</ul>
+<p>En clickant sur un cercle on obtient une visualisation des trajectoires plus ou moins 30 secondes avant et après l'événement</p>
+<p>&nbsp;<img src="/images/click.png" alt="" /></p>
+<p> <img src="/images/zoom_in.png"/> permet un zoom automatique vers la visualisation des traces.</p>
+<p> <img src="/images/zoom_out.png"/> permet de revenir a l'état de visualisation précédent</p>
+<p><img src="/images/information-icon-6093.png" alt="" width="25" height="25"/></p>
+<p>- Certain vols sont soumis 2 fois par le même pilote, ou un pilote différent (biplace, 2 enregistreurs pour le même vol, ...). Ils ont été supprimés, mais il peut en rester quelques uns (trace unique, ou deux traces presque toujours identiques).</p>
+<p>- La précision des deux sources barométrique et / ou du positionnement GPS peut avoir détecte uen situation dangereuse qui ne l'était pas, et inversement avoir omis une situation qui l'était.</p>

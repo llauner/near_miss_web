@@ -33,6 +33,11 @@ $('body').on('click', '#bt-zoom-out', function () {
         });
 });
 
+// --- Help ---
+$('#bt-help').on('click',
+    function () {
+        showHelp();
+    });
 
 // --- Enable / Disable UI elements ---
 /**
