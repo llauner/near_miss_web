@@ -90,7 +90,7 @@ function configureVectorPoints() {
                     {
 						radius: circleRadius
                     })
-                .bindPopup(`<b>${featureProperties.ts}</b>
+                .bindPopup(`<b>${featureProperties.ts_str}</b>
                             <table style="; border-collapse: collapse; border-color: #D3D3D3;" border="1">
                             <tbody>
                             <tr>
@@ -99,9 +99,9 @@ function configureVectorPoints() {
                             <td style="width: 21%;">&nbsp;</td>
                             </tr>
                             <tr>
-                            <td style="width: 10.4478%;"><b>Delta</b></td>
-                            <td style="width: 9.55228%;">&nbsp;</td>
-                            <td style="width: 21%;">${featureProperties.delta}</td>
+                            <td style="width: 10.4478%;background-color: #dbdbdb;"><b>Delta(m)</b></td>
+                            <td style="width: 9.55228%;background-color: #dbdbdb;">&nbsp;</td>
+                            <td style="width: 21%;background-color: #dbdbdb;">${featureProperties.delta}</td>
                             </tr>
                             <tr>
                             <td style="width: 10.4478%;"><b>Alt 2</b></td>
@@ -109,13 +109,13 @@ function configureVectorPoints() {
                             <td style="width: 21%;">&nbsp;</td>
                             </tr>
                             <tr>
-                            <td style="width: 10.4478%;"><b>Distance</b></td>
-                            <td style="width: 9.55228%;">&nbsp;</td>
-                            <td style="width: 21%;">${featureProperties.dist}</td>
+                            <td style="width: 10.4478%;background-color: #dbdbdb;"><b>Dist.(m)</b></td>
+                            <td style="width: 9.55228%;background-color: #dbdbdb;">&nbsp;</td>
+                            <td style="width: 21%;background-color: #dbdbdb;">${featureProperties.dist}</td>
                             </tr>
                             </tbody>
                             </table>
-                            <div hidden id="bt-show-track" data-fid1=${featureProperties.fid1} data-fid2=${featureProperties.fid2} data-points-index=${featureProperties.pointsGeoJsonIndex}></div>
+
                             <a href="#zoomout" role="button" id="bt-zoom-out">
                                 <i class="fa-solid fa-magnifying-glass-minus"></i>
                             </a>
@@ -126,10 +126,10 @@ function configureVectorPoints() {
                             </div>
                             `,
 					{
-						offset: [-25, -50]
+						offset: [0, -50]
                     })
                 .on('popupopen', function (e) {
-					displayTracks(featureProperties.fid1, featureProperties.fid2, featureProperties.pointsGeoJsonIndex );
+					displayTracks(featureProperties.ts, featureProperties.fid1, featureProperties.fid2, featureProperties.pointsGeoJsonIndex );
                 });
                 ;
             
@@ -208,7 +208,8 @@ function showHideVectorPoints(show) {
  * @param {any} feature
  */
 function getFeatureProperties(feature) {
-    var ts = moment(feature.properties.ts * 1000).format('D MMM YYYY - H:mm:ss');
+    var ts = feature.properties.ts;
+    var tsStr = moment(feature.properties.ts * 1000).format('D MMM YYYY - H:mm:ss');
 	var alt1 = feature.properties.alt1;
 	var alt2 = feature.properties.alt2;
 	var delta = Math.abs(alt1 - alt2);
@@ -218,8 +219,9 @@ function getFeatureProperties(feature) {
 
     var pointsGeoJsonIndex = _.indexOf(_pointsGeojson.features, feature, 0);
 
-    return {
-        ts: ts,
+	return {
+		ts: ts,
+        ts_str: tsStr,
         alt1: alt1,
         alt2: alt2,
         delta: delta,

@@ -3,7 +3,8 @@ var _layerShortTrack1 = null;
 var _layerShortTrack2 = null;
 var trackColorIndex = 0;
 
-var _currentZoom = null;
+var _currentZoom = startZooomLevel;
+var _currentMapCenter = null;
 
 // --- Color palette ---
 var _selectedPalette = "tol-rainbow";		// Current selected color palette name
@@ -53,27 +54,25 @@ function setupVectorTracks() {
  * @param {any} fid1
  * @param {any} fid2
  */
-function displayTracks(fid1, fid2, pointsGeoJsonIndex) {
-    //// Get fid
-    //var fid1 = $("#bt-show-track").data("fid1");
-    //var fid2 = $("#bt-show-track").data("fid2");
-    //var pointsToGeoJsonIndex = $("#bt-show-track").data("points-index");
+function displayTracks(ts, fid1, fid2, pointsGeoJsonIndex) {
+    // Get fid
+    //console.log(`fid1=${fid1} \t fid2=${fid2}`);
 
     // Fly to position and zoom
-    var center = _pointsGeojson.features[pointsGeoJsonIndex].geometry.coordinates[0];
-    center = [center[1], center[0]];
+    var center = _.find(_pointsGeojson.features, el => el.properties.fid1 == fid1 && el.properties.fid2 == fid2 && el.properties.ts == ts);
+    center = center.geometry.coordinates[0];
+    _currentMapCenter = [center[1], center[0]];
 
-    _currentZoom = _map.getZoom();
-    _map.flyTo(center);
-        //, 13,
-        //{
-        //    animate:false
-        //});
+    var myZoom = _map.getZoom();
+    _currentZoom = (myZoom < _trackZoomLevel) ? myZoom : _currentZoom;
+
+    _map.flyTo(_currentMapCenter);
+
 
     // --- Display tracks
     // Find geojson from both tracks
-    var track1 = _.find(_tracksJson, { fid: fid1 });
-    var track2 = _.find(_tracksJson, { fid: fid2 });
+    var track1 = _.find(_tracksJson, { fid: fid1, ts:ts});
+    var track2 = _.find(_tracksJson, { fid: fid2, ts:ts });
 
     if (_layerShortTrack1 != null && _layerShortTrack2 != null)
     {

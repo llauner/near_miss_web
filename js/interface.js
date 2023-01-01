@@ -21,10 +21,16 @@ function () {
 
 // Zoom IN to 30s track
 $('body').on('click', '#bt-zoom-in', function () {
-    _map.setZoom(15);
+    _map.flyTo(_currentMapCenter, _trackZoomLevel,
+        {
+            animate: false
+        });
 });
 $('body').on('click', '#bt-zoom-out', function () {
-    _map.setZoom(_currentZoom);
+    _map.flyTo(_currentMapCenter, _currentZoom,
+        {
+            animate:false
+        });
 });
 
 
