@@ -34,7 +34,7 @@ function setupMap() {
     _map = L.map('map', _mapOptions).setView(center, startZooomLevel);
     var sidebar = L.control.sidebar('sidebar').addTo(_map);
 
-    var Thunderforest_Outdoors = L.tileLayer('https://{s}.tile.thunderforest.com/outdoors/{z}/{x}/{y}.png?apikey={apikey}', {
+    var Thunderforest_Outdoors = L.tileLayer('https://{s}.tile.thunderforest.com/landscape/{z}/{x}/{y}.png?apikey={apikey}', {
         attribution: '&copy; <a href="http://www.thunderforest.com/">Thunderforest</a>, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         apikey: '45799462d9f6496aba635de79c086ea2',
         minZoom: minZoomLevel,

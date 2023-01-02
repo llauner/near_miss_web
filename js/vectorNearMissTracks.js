@@ -40,8 +40,8 @@ function setupVectorTracks() {
                 })
                 .finally(function () {
                     _map.spin(false);
-                    if (!_pointsGeojson) {
-                        console.log(errorThrown);
+                    if (!_tracksJson) {
+                        console.log(err);
                         toastr["error"]("Could not load zip Vector Tracks: " + zipVectorTracksUrl);
                     }
                 });
