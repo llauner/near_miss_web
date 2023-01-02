@@ -62,11 +62,7 @@ function setupVectorPoints() {
 			})
 			.finally(function() {
 				_map.spin(false);
-				if (!_pointsGeojson) {
-					console.log(errorThrown);
-					toastr["error"]("Could not load zip Vector Tracks: " + zipVectorTracksUrl);
-				}
-			});
+            });
 		});
 		});
 
@@ -173,19 +169,10 @@ function onEachFeature(feature, layer) {
 
 
 function updateVectorPointsStyle(color, opacity) {
-	// Solid color
-	if (color && opacity) {
-		vectorPointsStyle.color = color;
-		vectorPointsStyle.opacity = opacity;
-		_layerVectorPoints.setStyle(vectorPointsStyle);
-	}
-	// Palette
-	else {
-		trackColorIndex = 0;
-		_palette = palette(_selectedPalette, _selectedPaletteCount);
-		_layerVectorPoints.setStyle(setPointStyleFunction);
-	}
-	
+    // Palette
+    trackColorIndex = 0;
+    _palette = palette(_selectedPalette, _selectedPaletteCount);
+    _layerVectorPoints.setStyle(setPointStyleFunction);
 }
 
 /**

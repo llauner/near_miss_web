@@ -69,20 +69,6 @@ function initToolTip_OpenAipVector(metadata) {
 };
 
 
-// ---  Color Picker ---
-$('#color-picker').colorpicker({
-    color: vectorPointsStyle.color,
-    format: "hexa",
-    useAlpha: true
-});
-
-$('#color-picker').on('colorpickerChange', function(event) {
-    //$('#color-pciker').css('background-color', event.color.toString());
-    var color = event.color.toHexString();
-    var alpha = event.color._color.valpha;
-    updateVectorPointsStyle(color, alpha);
-});
-
 // --- Palette dropdown ---
 $(".dropdown li a").on("click", function (event) {
     console.log("You clicked the drop downs", event)

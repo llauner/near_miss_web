@@ -101,14 +101,10 @@
 
     <script src="js/common.js"></script>
     <script src="js/application.js"></script>
-    <script src="js/mbtilesTracks.js"></script>
     <script src="js/vectorTracks.js"></script>
     <script src="js/vectorNearMissTracks.js"></script>
     <script src="js/measuringTool.js"></script>
-    <script src="js/airports.js"></script>
     <script src="js/help.js"></script>
-
-    <script src="js/takeoffAirportSelection.js"></script>
 
 
 </head>
@@ -119,8 +115,7 @@
         <div class="sidebar-tabs">
             <ul role="tablist">
                 <li><a href="#home" role="tab"><i class="fa fa-info"></i></a></li>
-                <li><a href="#layers" role="tab"><i class="fas fa-layer-group"></i></a></li>
-                <li><a href="#settings" role="tab"><i class="fa fa-gear"></i></a></li>
+	            <li><a href="#settings" role="tab"><i class="fa fa-gear"></i></a></li>
             </ul>
         </div>
 
@@ -161,37 +156,12 @@
                 </div>
             </div>
 
-                <div class="sidebar-pane" id="layers">
-                    <h1 class="sidebar-header">Layers<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
-                    <div class="container">
-                        <!-- Airports-->
-                        <div class="row disabled" id="switch-airports-container">
-                            <div class="col-sm-3">
-                                <label class="form-check-label"><input type="checkbox" class="form-check-input" id="chk-airports">Aerodromes</label>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
                 <!-- Settings -->
                 <div class="sidebar-pane" id="settings">
                     <h1 class="sidebar-header">Settings<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
                     <div class="container">
-                        <!-- Color Picker -->
-                        <div class="row" id="color-picker-layer-container">
-                            <div class="col-sm-5">
-                                <div class="item">Couleur Traces: </div>
-                            </div>
-                            <div class="col-sm-7">
-                                <div id="color-picker" class="input-group" title="Using input value">
-                                    <span class="input-group-append">
-                                        <span class="input-group-text colorpicker-input-addon"><i></i></span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
 
-                        <!-- Palette picker-->
+	                    <!-- Palette picker-->
                         <div class="row" id="color-picker-layer-container">
                             <div class="col-sm-5">
                                 <div class="item">Palette Couleurs: </div>
@@ -278,7 +248,6 @@ $(function () {
 	setupMap();
 
     setupVectorPoints();
-    setupAirports();
 
     setupVectorTracks();
 
