@@ -95,6 +95,15 @@
     <script src="js/L.Modal.min.js"></script>
     <link rel="stylesheet" href="css/leaflet.modal.css" />
 
+    <!-- NoUisSlider -->
+    <script src="js/nouislider/nouislider.min.js"></script>
+    <link rel="stylesheet" href="js/nouislider/nouislider.css" />
+
+    <!-- Control bar-->
+    <script src="js/leaflet-control-bar/L.Control.Bar.js"></script>
+    <link rel="stylesheet" href="js/leaflet-control-bar/L.Control.Bar.css" />
+    <link rel="stylesheet" href="css/custom-control-bar.css" />
+
     <link rel="stylesheet" href="css/application.css">
     <link rel="stylesheet" href="css/traces.css">
     <link rel="stylesheet" href="css/help.css">
@@ -104,6 +113,7 @@
     <script src="js/vectorTracks.js"></script>
     <script src="js/vectorNearMissTracks.js"></script>
     <script src="js/measuringTool.js"></script>
+    <script src="js/timeSelector.js"></script>
     <script src="js/help.js"></script>
 
 
@@ -115,7 +125,7 @@
         <div class="sidebar-tabs">
             <ul role="tablist">
                 <li><a href="#home" role="tab"><i class="fa-solid fa-question"></i></a></li>
-	            <li><a href="#settings" role="tab"><i class="fa fa-gear"></i></a></li>
+                <li><a href="#settings" role="tab"><i class="fa fa-gear"></i></a></li>
             </ul>
         </div>
 
@@ -137,13 +147,13 @@
                     </div>
                 </div>
 
-	            <div class="container">
-		            <div class="row">
-			            <div class="col-sm-12">
-				            <div class="item"></div>
-			            </div>
-		            </div>
-	            </div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="item"></div>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="container">
                     <div class="row">
@@ -156,52 +166,52 @@
                 </div>
             </div>
 
-                <!-- Settings -->
-                <div class="sidebar-pane" id="settings">
-                    <h1 class="sidebar-header">Settings<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
-                    <div class="container">
+            <!-- Settings -->
+            <div class="sidebar-pane" id="settings">
+                <h1 class="sidebar-header">Settings<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+                <div class="container">
 
-	                    <!-- Palette picker-->
-                        <div class="row" id="color-picker-layer-container">
-                            <div class="col-sm-5">
-                                <div class="item">Palette Couleurs: </div>
-                            </div>
-                            <div class="col-sm-7">
+                    <!-- Palette picker-->
+                    <div class="row" id="color-picker-layer-container">
+                        <div class="col-sm-5">
+                            <div class="item">Palette Couleurs: </div>
+                        </div>
+                        <div class="col-sm-7">
 
-                                <div class="dropdown">
-                                    <div class="btn-group dropright">
-                                        <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-offset="-40,0">
-                                            Rainbow
-                                        </button>
-                                        <ul class="dropdown-menu" id="palette-picker">
-                                            <li><a class="dropdown-item" href="#" data-value="mpn65" data-count="20">Qualitative</a></li>
-                                            <li><a class="dropdown-item" href="#" data-value="tol-rainbow" data-count="20">Rainbow</a></li>
-                                            <li><a class="dropdown-item" href="#" data-value="cb-Spectral" data-count="10">Spectral</a></li>
-                                            <li><a class="dropdown-item" href="#" data-value="tol-sq" data-count="10">Sequential</a></li>
-                                        </ul>
-                                    </div>
+                            <div class="dropdown">
+                                <div class="btn-group dropright">
+                                    <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-offset="-40,0">
+                                        Rainbow
+                                    </button>
+                                    <ul class="dropdown-menu" id="palette-picker">
+                                        <li><a class="dropdown-item" href="#" data-value="mpn65" data-count="20">Qualitative</a></li>
+                                        <li><a class="dropdown-item" href="#" data-value="tol-rainbow" data-count="20">Rainbow</a></li>
+                                        <li><a class="dropdown-item" href="#" data-value="cb-Spectral" data-count="10">Spectral</a></li>
+                                        <li><a class="dropdown-item" href="#" data-value="tol-sq" data-count="10">Sequential</a></li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
 
-                        <!-- Scroll wheel zoom -->
-                        <div class="row" id="scroll-wheel-zoom-container">
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <label class="form-check-label"><input type="checkbox" class="form-check-input" id="chk-scroll-wheel-zoom" checked>Scroll wheel zoom</label>
-                                </div>
+                    <!-- Scroll wheel zoom -->
+                    <div class="row" id="scroll-wheel-zoom-container">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <label class="form-check-label"><input type="checkbox" class="form-check-input" id="chk-scroll-wheel-zoom" checked>Scroll wheel zoom</label>
                             </div>
                         </div>
-
                     </div>
 
                 </div>
 
-
-
-
             </div>
+
+
+
+
+        </div>
     </div>
 
     <div id="map"></div>
@@ -212,14 +222,22 @@
     </div>
 
 
-    <!--- Date Selector-->
+    <!-- <div id="date-picker-div" class="d-none">-->
     <div id="date-picker-div" class="d-none">
         <div id="datepicker" class="input-group date" data-date-format="mm-dd-yyyy">
             <input class="form-control" type="text" readonly />
             <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
         </div>
     </div>
+    
+    <div id="bottom-bar-container">
+        <div id="bottom-bar">
+            <div id="slider"></div>
 
+	        <span class="example-val" id="lbl-start-date">Friday, 1 January 2010</span>
+	        <span class="example-val" id="lbl-end-date">Friday, 1 January 2016</span>
+        </div>
+    </div>
 
 </body>
 </html>
@@ -250,6 +268,7 @@ $(function () {
     setupVectorPoints();
 
     setupVectorTracks();
+
 
 
 });

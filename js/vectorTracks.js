@@ -57,7 +57,8 @@ function setupVectorPoints() {
 				}
 				_pointsGeojson = data;
 				configureVectorPoints();
-				enableTrackSelection();
+                enableTrackSelection();
+                setupTimeSelector();
 				//setupTakeoffAirportSelecttion();
 			})
 			.finally(function() {

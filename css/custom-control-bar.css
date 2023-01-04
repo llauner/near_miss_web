@@ -1,0 +1,15 @@
+﻿.leaflet-control-bar-bottom.leaflet-control-bar {
+    height: 100px;
+}
+
+.example-val {
+    font: 400 12px Arial;
+    color: #888;
+    display: block;
+    margin: 15px 0;
+}
+
+.example-val:before {
+    content: "Value: ";
+    font: 700 12px Arial;
+}
