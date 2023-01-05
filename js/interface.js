@@ -35,17 +35,6 @@ $('#bt-help').on('click',
 // --- Time Slider ---
 $('#time-selector').on('setupEnd', function (e, eventInfo) {
     _timeSlider.noUiSlider.on('set', function (values, handle) {
-        _startTimeStamp = values[0];
-        _endTimeStamp = values[1];
-        var strStart = timestampToString(_startTimeStamp);
-        var strEnd = timestampToString(_endTimeStamp);
-
-        $("#lbl-start-date").text(strStart);
-        $("#lbl-end-date").text(strEnd);
-
-        // --- Refresh map
-        showHideVectorPoints(false);
-        configureVectorPoints();
-        showHideVectorPoints(true);
+        onValueChanged(values, handle);
     });
 });

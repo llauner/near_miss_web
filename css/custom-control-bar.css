@@ -16,8 +16,3 @@
 .ts-lbl-right {
     float: right;
 }
-
-.ts-lbl:before {
-    content: "Value: ";
-    font: 700 12px Arial;
-}

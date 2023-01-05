@@ -1,4 +1,5 @@
 ﻿var _timeSlider = null;
+var _timeStamps = null;
 var _startTimeStamp = null;
 var _endTimeStamp = null;
 
@@ -15,12 +16,12 @@ function setupTimeSelector() {
 
 
     // Get timestamps
-    timeStamps = _pointsGeojson.features.map(f => f.properties.ts);
-    timeStamps = _.uniq(timeStamps);
-    timeStamps = _.sortBy(timeStamps);
+    _timeStamps = _pointsGeojson.features.map(f => f.properties.ts);
+    _timeStamps = _.uniq(_timeStamps);
+    _timeStamps = _.sortBy(_timeStamps);
+
 
     _timeSlider = document.getElementById('time-selector');
-    var valuesForSlider = timeStamps;
 
     var format = {
         to: function (value) {
@@ -31,35 +32,66 @@ function setupTimeSelector() {
         }
     };
 
-    var minRange = valuesForSlider[0];
-    var maxRange = valuesForSlider[valuesForSlider.length - 1];
+    var minRange = getStartOfDay(_timeStamps[0]);
+    var maxRange = getEndOfDay(_timeStamps[_timeStamps.length - 1]);
 
     noUiSlider.create(_timeSlider, {
         start: [minRange, maxRange],
         range: { min: minRange, max: maxRange },
-        // steps of 1
-        //step: 1,
+        step: 86400,
+        behaviour: 'snap',
+        connect: true,
         tooltips:
         {
             to: function (value) {
-                return timestampToString(value);
+                return timestampToDay(value);
             },
             from: function (value) {
                 return value;
             }
         },
 
-        //pips: { mode: 'steps', density: 5, orientation: 'vertical' }
+        
     });
 
-    // The display values can be used to control the slider
-    //_timeSlider.noUiSlider.set([minRange, maxRange]);
+    // --- Update start and end date labels
+    var strStart = timestampToDay(minRange);
+    var strEnd = timestampToDay(maxRange);
 
+    $("#lbl-start-date").text(strStart);
+    $("#lbl-end-date").text(strEnd);
 
     $(document).trigger('timeSelectorSetupEnd', null);
 }
 
+function onValueChanged(values, handle) {
+    _startTimeStamp = getStartOfDay(values[0]);
+    _endTimeStamp = getEndOfDay(values[1]);
+
+
+    // --- Refresh map
+    showHideVectorPoints(false);
+    configureVectorPoints();
+    showHideVectorPoints(true);
+}
+
 
 function timestampToString(ts) {
+    moment.locale('fr');
     return moment(ts * 1000).format('D MMM YYYY - H:mm:ss');
 };
+function timestampToDay(ts) {
+    moment.locale('fr');
+    return moment(ts * 1000).format('D MMM YYYY');
+};
+
+function getStartOfDay(ts) {
+    const timezoneOffset = moment(ts * 1000).utcOffset();
+    var epochStart = moment(ts * 1000).utc().add(timezoneOffset, 'minutes').startOf('day').unix();
+    return epochStart;
+}
+function getEndOfDay(ts) {
+    const timezoneOffset = moment(ts * 1000).utcOffset();
+    var epochStart = moment(ts * 1000).utc().add(timezoneOffset, 'minutes').endOf('day').unix();
+    return epochStart;
+}
