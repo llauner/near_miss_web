@@ -57,10 +57,8 @@ function setupVectorPoints() {
 				}
 				_pointsGeojson = data;
 				configureVectorPoints();
-                enableTrackSelection();
                 setupTimeSelector();
-				//setupTakeoffAirportSelecttion();
-			})
+            })
 			.finally(function() {
 				_map.spin(false);
             });
@@ -72,10 +70,12 @@ function setupVectorPoints() {
 
 var trackColorIndex = 0;
 function configureVectorPoints() {
+    trackColorIndex = 0;
     _palette = palette(_selectedPalette, _selectedPaletteCount);
 
     _layerVectorPoints = L.geoJSON(_pointsGeojson, {
-		style: setPointStyleFunction,
+        style: setPointStyleFunction,
+        filter: filterByDate,
 		onEachFeature: onEachFeature,			// Configure action when a track is clicked
 		pointToLayer: function (feature, latlng) {
 			var featureProperties = getFeatureProperties(feature);
@@ -131,16 +131,23 @@ function configureVectorPoints() {
                 ;
             
         }
-		//filter: filterByTakeOffLocation
     });
 
 
     _layerVectorPoints.addTo(_map);
     }
 
+
 setPointStyleFunction = function (feature) {
-	trackColorIndex++;
-	vectorPointsStyle.color = "#" + _palette[trackColorIndex % _palette.length];
+    if (!feature.color) {
+        trackColorIndex++;
+        var color = "#" + _palette[trackColorIndex % _palette.length];
+        vectorPointsStyle.color = color;
+        feature.color = color;
+    } else {
+        vectorPointsStyle.color = feature.color;
+    }
+    
 	return vectorPointsStyle;
 }
 
@@ -168,13 +175,13 @@ function onEachFeature(feature, layer) {
 
 }
 
+function filterByDate(feature) {
+    if (_startTimeStamp == null || _endTimeStamp == null)
+        return true;
 
-function updateVectorPointsStyle(color, opacity) {
-    // Palette
-    trackColorIndex = 0;
-    _palette = palette(_selectedPalette, _selectedPaletteCount);
-    _layerVectorPoints.setStyle(setPointStyleFunction);
+    return feature.properties.ts >= _startTimeStamp && feature.properties.ts <= _endTimeStamp;
 }
+
 
 /**
  * showHideVectorPoints

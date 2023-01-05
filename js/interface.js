@@ -1,23 +1,16 @@
-// Tracks layer
-var _isVectorTracksLayerSelected = true;
 
-
-// ----- Event handlers -----
-
-// --- Show / hide airports ---
-$('#chk-airports').on('change',
-function () {
-    var show = $('#chk-airports').is(':checked');
-    showHideAirports(show);
+// Shorthand for $( document ).ready()
+$(function () {
+    
+    // --- Setup custom events ---
+    $(document).on('timeSelectorSetupEnd', function (e, eventInfo) {
+        subscribers = $('.subscribers-timeSelectorSetupEnd');
+        subscribers.trigger('setupEnd', [eventInfo]);
+    });
 });
 
 
-// --- Scroll Wheel Zoom
-$('#chk-scroll-wheel-zoom').on('change',
-function () {
-    var checked = $('#chk-scroll-wheel-zoom').is(':checked');
-    updateMapOptions(checked);
-    });
+// ----- Event handlers -----
 
 // Zoom IN to 30s track
 $('body').on('click', '#bt-zoom-in', function () {
@@ -39,91 +32,20 @@ $('#bt-help').on('click',
         showHelp();
     });
 
-// --- Enable / Disable UI elements ---
-/**
- * enableDisableTrackSelection
- * Disable the track selection until the Vector tracks have been loaded
- * @param {*} enable
- */
-function enableTrackSelection() {
-    $('#switch-tracks-container').removeClass("disabled");
-}
+// --- Time Slider ---
+$('#time-selector').on('setupEnd', function (e, eventInfo) {
+    _timeSlider.noUiSlider.on('set', function (values, handle) {
+        _startTimeStamp = values[0];
+        _endTimeStamp = values[1];
+        var strStart = timestampToString(_startTimeStamp);
+        var strEnd = timestampToString(_endTimeStamp);
 
+        $("#lbl-start-date").text(strStart);
+        $("#lbl-end-date").text(strEnd);
 
-function enableAirportsSelection() {
-    $('#switch-airports-container').removeClass("disabled");
-}
-
-function enableAirportFilterSelection() {
-    $('#select-airfield').removeClass("disabled");
-}
-
-// --- Init tooltips ---
-function initToolTip_OpenAipVector(metadata) {
-    var text = `Source: OpenAip<br>Date: ${metadata.date}<br>Airspace Count: ${metadata.airspaceCount}`;
-    $('[data-toggle="tooltip"]').tooltip({
-        placement: 'auto',
-        html: true,
-        title: text
-    });
-};
-
-
-// --- Palette dropdown ---
-$(".dropdown li a").on("click", function (event) {
-    console.log("You clicked the drop downs", event)
-    $(this).parents(".dropdown").find('.btn').html($(this).text() + ' <span class="caret"></span>');
-    $(this).parents(".dropdown").find('.btn').val($(this).data('value'));
-
-    _selectedPalette = $(this).data('value');
-    _selectedPaletteCount=parseInt($(this).data('count'));
-    updateVectorPointsStyle(null, null);
-});
-
-// --- Links ---
-$('a[href="#tracks2020"]').click(function () {
-    location.replace('/?year=2020');
-}); 
-
-$('a[href="#tracks2021"]').click(function () {
-    location.replace('/?year=2021');
-});
-
-$('a[href="#tracks2022"]').click(function () {
-    location.replace('/?year=2022');
-});
-$('a[href="#help"]').click(function () {
-    location.replace('/help.htm');
-});
-
-// --- Filters ---
-$('#select-airfield').on('change',
-    function () {
-        var selectedAirfield = $("#select-airfield").val();
-        targetAirfieldIndex = -1;
-
-        // Target airfield specified as query string parameter
-        if (_targetAirfield != null) {
-            targetAirfieldIndex = getAirportIndex(_targetAirfield);
-            selectedAirfield = (targetAirfieldIndex > -1) ? targetAirfieldIndex + 1 : selectedAirfield;
-
-            $("#select-airfield").val(selectedAirfield);
-            _targetAirfield = null;
-
-            if (targetAirfieldIndex == -1) {
-                toastr["error"]("Target Airfield does not exist / not available for the current day: " + _targetAirfield);
-                console.log(err);
-            }
-        }
-        _currentAirportFilterValue = (selectedAirfield == 0) ? null : selectedAirfield;
-
-        console.log(`Filter on takeoff airfield: ${selectedAirfield} - ${_selectableAirportsName[_currentAirportFilterValue - 1]}`)
- 
+        // --- Refresh map
         showHideVectorPoints(false);
-        configureVectorPoints(true);
+        configureVectorPoints();
         showHideVectorPoints(true);
-
-        // ----- MbTiles -----
-        if (_mapboxPbfLayer)
-            _mapboxPbfLayer.redraw();
     });
+});

@@ -19,8 +19,8 @@ function setupTimeSelector() {
     timeStamps = _.uniq(timeStamps);
     timeStamps = _.sortBy(timeStamps);
 
-    _timeSlider = document.getElementById('slider');
-    var valuesForSlider = timeStamps; // 16 values
+    _timeSlider = document.getElementById('time-selector');
+    var valuesForSlider = timeStamps;
 
     var format = {
         to: function (value) {
@@ -31,35 +31,35 @@ function setupTimeSelector() {
         }
     };
 
+    var minRange = valuesForSlider[0];
+    var maxRange = valuesForSlider[valuesForSlider.length - 1];
+
     noUiSlider.create(_timeSlider, {
-        start: [8, 24],
-        // A linear range from 0 to 15 (16 values)
-        range: { min: 0, max: valuesForSlider.length - 1 },
+        start: [minRange, maxRange],
+        range: { min: minRange, max: maxRange },
         // steps of 1
         //step: 1,
-        tooltips: true,
-        format: format,
-        pips: { mode: 'steps', density: 5, orientation: 'vertical' },
+        tooltips:
+        {
+            to: function (value) {
+                return timestampToString(value);
+            },
+            from: function (value) {
+                return value;
+            }
+        },
+
+        //pips: { mode: 'steps', density: 5, orientation: 'vertical' }
     });
 
     // The display values can be used to control the slider
-    _timeSlider.noUiSlider.set(['7', '28']);
+    //_timeSlider.noUiSlider.set([minRange, maxRange]);
 
-    _timeSlider.noUiSlider.on('update', function (values, handle) {
-        _startTimeStamp = values[0];
-        _endTimeStamp = values[1];
-        var strStart = moment(_startTimeStamp * 1000).format('D MMM YYYY - H:mm:ss');
-        var strEnd = moment(_endTimeStamp * 1000).format('D MMM YYYY - H:mm:ss');
 
-        console.log(`start=${strStart} \t end=${strEnd}`);
-
-        $("#lbl-start-date").text(strStart);
-        $("#lbl-end-date").text(strEnd);
-    });
+    $(document).trigger('timeSelectorSetupEnd', null);
 }
 
-var dateValues = [
-    document.getElementById('event-start'),
-    document.getElementById('event-end')
-];
 
+function timestampToString(ts) {
+    return moment(ts * 1000).format('D MMM YYYY - H:mm:ss');
+};

@@ -44,21 +44,3 @@ function setupMap() {
     // Add scale
     L.control.scale({ maxWidth: 240, metric: true, imperial: false, position: 'bottomleft' }).addTo(_map);
 }
-
-function updateMapOptions(scrollWheelZoom) {
-    setMapOption('scrollWheelZoom', scrollWheelZoom);
-    showHideMeasuringTool(true);
-}
-
-function setMapOption( newMapOptionKey, newMapOptionVal ){
-    // set map option
-    L.Util.setOptions( _map, {[newMapOptionKey]: newMapOptionVal});
-    // apply option to handler
-    if ( _map[newMapOptionKey] instanceof L.Handler ) {
-        if ( newMapOptionVal ) {
-            _map[newMapOptionKey].enable();
-        } else {
-            _map[newMapOptionKey].disable();
-        }
-    }
-}
