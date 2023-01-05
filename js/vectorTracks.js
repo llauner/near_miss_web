@@ -76,8 +76,7 @@ function configureVectorPoints() {
     _layerVectorPoints = L.geoJSON(_pointsGeojson, {
         style: setPointStyleFunction,
         filter: filterByDate,
-		onEachFeature: onEachFeature,			// Configure action when a track is clicked
-		pointToLayer: function (feature, latlng) {
+        pointToLayer: function (feature, latlng) {
 			var featureProperties = getFeatureProperties(feature);
 
             var circleRadius = 10;
@@ -151,29 +150,6 @@ setPointStyleFunction = function (feature) {
 	return vectorPointsStyle;
 }
 
-var _clickedFeatureOldStyle = null;
-var _clickedLayer = null;
-/**
- * onEachFeature
- * Change track style on click. Restore style of previously clicked track
- * @param {any} feature
- * @param {any} layer
- */
-function onEachFeature(feature, layer) {
-	//bind click
-	layer.on('click', function (e) {
-		if (_clickedFeatureOldStyle && _clickedLayer) {
-			_clickedLayer.setStyle(_clickedFeatureOldStyle);
-		}
-		_clickedLayer = this;
-		_clickedFeatureOldStyle = Object.assign({}, vectorPointsStyle);
-		_clickedFeatureOldStyle.color = this.options.color;
-
-		this.setStyle(clickedVectorPointsStyle);
-
-	});
-
-}
 
 function filterByDate(feature) {
     if (_startTimeStamp == null || _endTimeStamp == null)

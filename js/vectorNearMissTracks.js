@@ -2,6 +2,10 @@
 var _layerShortTrack1 = null;
 var _layerShortTrack2 = null;
 var trackColorIndex = 0;
+var _isAntPathPaused = false;
+
+var _antPolyline1 = null;
+var _antPolyline2 = null;
 
 var _currentZoom = startZooomLevel;
 var _currentMapCenter = null;
@@ -54,13 +58,13 @@ function setupVectorTracks() {
  * @param {any} fid1
  * @param {any} fid2
  */
-function displayTracks(ts, fid1, fid2, pointsGeoJsonIndex) {
+function displayTracks(ts, fid1, fid2) {
     // Get fid
     //console.log(`fid1=${fid1} \t fid2=${fid2}`);
 
     // Fly to position and zoom
-    var center = _.find(_pointsGeojson.features, el => el.properties.fid1 == fid1 && el.properties.fid2 == fid2 && el.properties.ts == ts);
-    center = center.geometry.coordinates[0];
+    var feature = _.find(_pointsGeojson.features, el => el.properties.fid1 == fid1 && el.properties.fid2 == fid2 && el.properties.ts == ts);
+    center = feature.geometry.coordinates[0];
     _currentMapCenter = [center[1], center[0]];
 
     var myZoom = _map.getZoom();
@@ -81,7 +85,7 @@ function displayTracks(ts, fid1, fid2, pointsGeoJsonIndex) {
     }
 
     _layerShortTrack1 = L.geoJSON(track1.track, {
-        style: setTrackStyleFunction
+        style: setTrackStyleFunction,
     });
 
     _layerShortTrack2 = L.geoJSON(track2.track, {
@@ -97,100 +101,57 @@ function displayTracks(ts, fid1, fid2, pointsGeoJsonIndex) {
     track1.track.coordinates.forEach(c => polyLine1.push([c[1], c[0]]));
     track2.track.coordinates.forEach(c => polyLine2.push([c[1], c[0]]));
 
+    _antPolyline1 = new L.Polyline.AntPath(polyLine1,
+        {
+            hardwareAccelerated: true,
+            delay: 500,
+            color: _layerShortTrack1.color,
+            dashArray: 30
+        });
 
-    //var line1 = L.polyline(polyLine1);
-    //line1.addTo(_map);
-    //var line2 = L.polyline(polyLine2);
-    //line2.addTo(_map);
-
-    //line1.snakeIn();
-    //line2.snakeIn();
-
-    //line1.remove(_map);
-    //line2.remove(_map);
-
-    //var myIcon = L.icon({
-    //    iconUrl: '/images/glider.png',
-    //    iconSize: [50, 50]
-    //});
-
-
-    //L.motion.polyline(polyLine1, {
-    //    color: "transparent"
-    //}, {
-    //    auto: true,
-    //    duration: 10000,
-    //   // easing: L.Motion.Ease.easeInOutQuart
-    //}, {
-    //    removeOnEnd: true,
-    //    showMarker: true,
-    //    icon: L.divIcon({
-    //        icon: L.divIcon({
-    //            html: "<i class='fa fa-plane fa-2x' aria-hidden='true'  motion-base='-48'></i>",
-    //            iconSize:L.point(19, 24)
-    //        })
-    //    })
-    //}).addTo(_map);
-
-    //L.motion.polyline(polyLine2, {
-    //    color: "transparent"
-    //}, {
-    //    auto: true,
-    //    duration: 10000,
-    //    //easing: L.Motion.Ease.easeInOutQuart
-    //}, {
-    //    removeOnEnd: true,
-    //    showMarker: true,
-    //    icon: L.divIcon({
-    //        html: "<i class='fa fa-plane fa-2x' aria-hidden='true'  motion-base='-48'></i>",
-    //        iconSize: L.point(19, 24)
-    //    })
-    //}).addTo(_map);
+    _antPolyline2 = new L.Polyline.AntPath(polyLine2,
+        {
+            hardwareAccelerated: true,
+            delay: 500,
+            color: _layerShortTrack2.color,
+            dashArray: 30
+        });
 
 
-    //var myIcon = L.icon({
-    //    iconUrl: '/images/glider.png',
-    //    iconSize: [50, 50]
-    //});
+    _antPolyline1.addTo(_map);
+    _antPolyline2.addTo(_map);
 
+    // --- Events
+    _antPolyline1.on('click',
+        function(layer, e) {
+            antPathPauseResume();
+        });
 
-    //var myMovingMarker1 = L.Marker.movingMarker(polyLine1,
-    //    7000,
-    //    {
-    //        loop: true,
-    //        icon: myIcon
-    //    }).addTo(_map);
-    ////...
-
-
-    //var myMovingMarker2 = L.Marker.movingMarker(polyLine2,
-    //    7000,
-    //    {
-    //        loop: true,
-    //        icon: myIcon
-    //    }).addTo(_map);
-    ////...
-
-
-    //myMovingMarker1.start();
-    //myMovingMarker2.start();
-
-
-    //var line = L.polyline(pl),
-    //    animatedMarker = L.animatedMarker(line.getLatLngs(),
-    //        {
-    //            distance: 1000,
-    //            interval: 500,
-    //            icon: myIcon
-    //        });
-
-    //_map.addLayer(animatedMarker);
-    //animatedMarker.start();
+    _antPolyline2.on('click',
+        function (layer, e) {
+            antPathPauseResume(layer);
+        });
 
 };
 
+function antPathPauseResume(layer) {
+    if (_isAntPathPaused) {
+        _antPolyline1.resume();
+        _antPolyline2.resume();
+    } else {
+        _antPolyline1.pause();
+        _antPolyline2.pause();
+    }
+    _isAntPathPaused = !_isAntPathPaused;
+
+}
+
+
+
 setTrackStyleFunction = function (feature) {
     trackColorIndex++;
-    vectorTracksStyle.color = "#" + _palette[trackColorIndex % _palette.length];
+    var color = "#" + _palette[trackColorIndex % _palette.length];
+    feature.color = color;
+    vectorTracksStyle.color = color;
     return vectorTracksStyle;
 }
