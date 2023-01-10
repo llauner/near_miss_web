@@ -38,3 +38,12 @@ $('#time-selector').on('setupEnd', function (e, eventInfo) {
         onValueChanged(values, handle);
     });
 });
+
+// Year selection change
+$('input[name=toggle]').on('change',
+    function (e) {
+        var selectedYear = $('input[name=toggle]:checked').val();
+        newYear = parseInt(selectedYear);
+        console.log(`Changing selected year to: ${newYear}`);
+        switchYear(newYear);
+    });

@@ -3,6 +3,7 @@ var minZoomLevel = 3;
 var maxZoomLevel = 19;
 var _trackZoomLevel = 15;
 var center = [47.5, 4.8];
+var _selectedYear = 2022;
 
 toastr.options = {
     "closeButton": false,
@@ -34,6 +35,7 @@ function setupMap() {
     _map = L.map('map', _mapOptions).setView(center, startZooomLevel);
     var sidebar = L.control.sidebar('sidebar').addTo(_map);
 
+
     var baseMapLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -43,4 +45,28 @@ function setupMap() {
 
     // Add scale
     L.control.scale({ maxWidth: 240, metric: true, imperial: false, position: 'bottomleft' }).addTo(_map);
+}
+
+function removeLayers() {
+    if (_layerVectorPoints)
+        _map.removeLayer(_layerVectorPoints);
+    if (_layerShortTrack1)
+        _map.removeLayer(_layerShortTrack1);
+    if (_layerShortTrack2)
+        _map.removeLayer(_layerShortTrack2);
+    if (_antPolyline1)
+        _map.removeLayer(_antPolyline1);
+    if (_antPolyline2)
+        _map.removeLayer(_antPolyline2);
+}
+
+function setupLayers() {
+    setupVectorPoints();
+    setupVectorTracks();
+}
+
+function switchYear(newYear) {
+    _selectedYear = newYear;
+    removeLayers();
+    setupLayers();
 }

@@ -2,18 +2,25 @@
 var _timeStamps = null;
 var _startTimeStamp = null;
 var _endTimeStamp = null;
+var _controlBar = null;
+var _slider = null;
 
 function setupTimeSelector() {
-    var controlBar = L.control.bar('bottom-bar', {
-        position: 'bottom',
-        visible: true
-    });
-    _map.addControl(controlBar);
+    if (!_controlBar) {
+        _controlBar = L.control.bar('bottom-bar', {
+            position: 'bottom',
+            visible: true
+        });
+        _map.addControl(_controlBar);
 
-    setTimeout(function () {
-        controlBar.show();
-    }, 500);
+        setTimeout(function () {
+            _controlBar.show();
+        }, 500);
+    }
 
+    if (_slider) {
+        _slider.destroy();
+    }
 
     // Get timestamps
     _timeStamps = _pointsGeojson.features.map(f => f.properties.ts);
@@ -35,7 +42,7 @@ function setupTimeSelector() {
     var minRange = getStartOfDay(_timeStamps[0]);
     var maxRange = getEndOfDay(_timeStamps[_timeStamps.length - 1]);
 
-    noUiSlider.create(_timeSlider, {
+    _slider = noUiSlider.create(_timeSlider, {
         start: [minRange, maxRange],
         range: { min: minRange, max: maxRange },
         step: 86400,

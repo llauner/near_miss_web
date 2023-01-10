@@ -41,7 +41,7 @@ function selectPoint() {
  *
  */
 function setupVectorPoints() {
-    var zipVectorTracksUrl = NetcoupeTracksDataUrl + "2022_nearmiss.zip";
+    var zipVectorTracksUrl = NetcoupeTracksDataUrl + `${_selectedYear}_nearmiss.zip`;
     _map.spin(true);
         JSZipUtils.getBinaryContent(zipVectorTracksUrl, function(err, data) {
 		if(err) {

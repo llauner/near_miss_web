@@ -26,7 +26,7 @@ var vectorTracksStyle = {
  *
  */
 function setupVectorTracks() {
-    var zipVectorTracksUrl = NetcoupeTracksDataUrl + "2022_nearmiss_tracks.zip";
+    var zipVectorTracksUrl = NetcoupeTracksDataUrl + `${_selectedYear}_nearmiss_tracks.zip`;
     _map.spin(true);
     JSZipUtils.getBinaryContent(zipVectorTracksUrl, function (err, data) {
         if (err) {
@@ -78,10 +78,15 @@ function displayTracks(ts, fid1, fid2) {
     var track1 = _.find(_tracksJson, { fid: fid1, ts:ts});
     var track2 = _.find(_tracksJson, { fid: fid2, ts:ts });
 
+    // --- Remove previous Layers if exists ---
     if (_layerShortTrack1 != null && _layerShortTrack2 != null)
     {
         _map.removeLayer(_layerShortTrack1);
         _map.removeLayer(_layerShortTrack2);
+    }
+    if (_antPolyline1 != null && _antPolyline2 != null) {
+        _map.removeLayer(_antPolyline1);
+        _map.removeLayer(_antPolyline2);
     }
 
     _layerShortTrack1 = L.geoJSON(track1.track, {

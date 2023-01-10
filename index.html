@@ -101,11 +101,12 @@
     <!-- Control bar-->
     <script src="js/leaflet-control-bar/L.Control.Bar.js"></script>
     <link rel="stylesheet" href="js/leaflet-control-bar/L.Control.Bar.css" />
-    <link rel="stylesheet" href="css/custom-control-bar.css" />
+    <!--<link rel="stylesheet" href="css/custom-control-bar.css" />-->
 
     <link rel="stylesheet" href="css/application.css">
     <link rel="stylesheet" href="css/traces.css">
     <link rel="stylesheet" href="css/help.css">
+    <link rel="stylesheet" href="css/toolbox.css">
 
     <script src="js/common.js"></script>
     <script src="js/application.js"></script>
@@ -118,6 +119,21 @@
 
 </head>
 <body>
+    <div id="sidebar-toolbox" class="sidebar toolbox">
+	    <div class="one-line">
+		    <h6 class="font-weight-bold">Year</h6>
+	    </div>
+	    <div class="container">
+		    <div class="btn-group" id="filterDay" data-toggle="buttons">
+			    <label class="btn btn-default">
+				    <input type="radio" class="toggle" name="toggle" value="2022" checked>2022
+			    </label>
+			    <label class="btn btn-default">
+				    <input type="radio" class="toggle" name="toggle" value="2023">2023
+			    </label>
+		    </div>
+	    </div>
+    </div>
 
     <div id="sidebar" class="sidebar collapsed">
         <!-- Nav tabs -->
@@ -183,13 +199,13 @@
             <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
         </div>
     </div>
-    
+
     <div id="bottom-bar-container">
         <div id="bottom-bar">
             <div id="time-selector" class="subscribers-timeSelectorSetupEnd"></div>
 
-	        <span class="ts-lbl ts-lbl-left" id="lbl-start-date">Friday, 1 January 2010</span>
-	        <span class="ts-lbl ts-lbl-right" id="lbl-end-date">Friday, 1 January 2016</span>
+            <span class="ts-lbl ts-lbl-left" id="lbl-start-date">Friday, 1 January 2010</span>
+            <span class="ts-lbl ts-lbl-right" id="lbl-end-date">Friday, 1 January 2016</span>
         </div>
     </div>
 
@@ -219,11 +235,6 @@ var _statWindow = null;
 $(function () {
 	setupMap();
 
-    setupVectorPoints();
-
-    setupVectorTracks();
-
-
-
+	setupLayers();
 });
 </script>
