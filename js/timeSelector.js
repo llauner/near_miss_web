@@ -56,9 +56,7 @@ function setupTimeSelector() {
             from: function (value) {
                 return value;
             }
-        },
-
-        
+        }
     });
 
     // --- Update start and end date labels
@@ -93,12 +91,25 @@ function timestampToDay(ts) {
 };
 
 function getStartOfDay(ts) {
-    const timezoneOffset = moment(ts * 1000).utcOffset();
-    var epochStart = moment(ts * 1000).utc().add(timezoneOffset, 'minutes').startOf('day').unix();
+    var epochStart = null;
+    if (!ts) {
+        const timezoneOffset = moment().utcOffset();
+        epochStart = moment().utc().add(timezoneOffset, 'minutes').startOf('year').unix();
+    } else {
+        const timezoneOffset = moment(ts * 1000).utcOffset();
+        epochStart = moment(ts * 1000).utc().add(timezoneOffset, 'minutes').startOf('day').unix();
+    }
     return epochStart;
 }
 function getEndOfDay(ts) {
-    const timezoneOffset = moment(ts * 1000).utcOffset();
-    var epochStart = moment(ts * 1000).utc().add(timezoneOffset, 'minutes').endOf('day').unix();
-    return epochStart;
+    var epochEnd = null;
+    if (!ts) {
+        const timezoneOffset = moment().utcOffset();
+        epochEnd = moment().utc().add(timezoneOffset, 'minutes').endOf('year').unix();
+    } else {
+        const timezoneOffset = moment(ts * 1000).utcOffset();
+        epochEnd = moment(ts * 1000).utc().add(timezoneOffset, 'minutes').endOf('day').unix();
+    }
+    
+    return epochEnd;
 }
