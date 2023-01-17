@@ -63,6 +63,7 @@ function removeLayers() {
 function setupLayers() {
     setupVectorPoints();
     setupVectorTracks();
+    setupTakeoffLocation();
 }
 
 function switchYear(newYear) {

@@ -55,9 +55,18 @@ function setupVectorPoints() {
 				if (typeof (data) !== 'object') {
 					data = JSON.parse(data);
 				}
-				_pointsGeojson = data;
-				configureVectorPoints();
-                setupTimeSelector();
+                _pointsGeojson = data;
+
+                (async () => {
+                    console.log("waiting for _proximityInfo to be defined...");
+                    while (_proximityInfo == null) // define the condition as you like
+                        await new Promise(resolve => setTimeout(resolve, 300));
+
+                    // _pointsGeojson has been enriched, we can carry on ...
+                    configureVectorPoints();
+                    setupTimeSelector();
+                })();
+				
             })
 			.finally(function() {
 				_map.spin(false);
@@ -90,19 +99,26 @@ function configureVectorPoints() {
                             <table style="; border-collapse: collapse; border-color: #D3D3D3;" border="1">
                             <tbody>
                             <tr>
-                            <td style="width: 10.4478%;"><b>Alt 1</b></td>
+                            <td style="width: 10.4478%;"><b><span title="D&eacute;co. probable: ${featureProperties.tkoff1}">Alt 1</span></b></td>
                             <td style="width: 9.55228%;">${featureProperties.alt1}</td>
-                            <td style="width: 21%;">&nbsp;</td>
+                            <td style="width: 21%;"><span style="color: #999999;">${featureProperties.alt_source1}</span></td>
                             </tr>
                             <tr>
                             <td style="width: 10.4478%;background-color: #dbdbdb;"><b>Delta(m)</b></td>
                             <td style="width: 9.55228%;background-color: #dbdbdb;">&nbsp;</td>
-                            <td style="width: 21%;background-color: #dbdbdb;">${featureProperties.delta}</td>
+                                <td style="width: 21%;background-color: #dbdbdb;">${featureProperties.delta}
+                                    <div class="icon-container">
+                                        <img style="float: right;" src="/images/${featureProperties.alt_icon}"/>
+                                        <div class="overlay">
+                                            <div class="text">Confiance:<br>${feature.properties.alt_confidence} / 3</div>
+                                        </div>
+                                    </div>
+                                </td>
                             </tr>
                             <tr>
-                            <td style="width: 10.4478%;"><b>Alt 2</b></td>
+                            <td style="width: 10.4478%;"><b><span title="D&eacute;co. probable: ${featureProperties.tkoff2}">Alt 2</span></b></td>
                             <td style="width: 9.55228%;">${featureProperties.alt2}</td>
-                            <td style="width: 21%;">&nbsp;</td>
+                            <td style="width: 21%;"><span style="color: #999999;">${featureProperties.alt_source2}</span></td>
                             </tr>
                             <tr>
                             <td style="width: 10.4478%;background-color: #dbdbdb;"><b>Dist.(m)</b></td>
@@ -122,7 +138,8 @@ function configureVectorPoints() {
                             </div>
                             `,
 					{
-						offset: [0, -50]
+                        offset: [0, -50],
+                        minWidth: 275
                     })
                 .on('popupopen', function (e) {
 					displayTracks(featureProperties.ts, featureProperties.fid1, featureProperties.fid2, featureProperties.pointsGeoJsonIndex );
@@ -186,9 +203,28 @@ function getFeatureProperties(feature) {
 	var delta = Math.abs(alt1 - alt2);
 	var dist = feature.properties.dist;
 	var fid1 = feature.properties.fid1;
-	var fid2 = feature.properties.fid2;
+    var fid2 = feature.properties.fid2;
+    var alt_source1 = feature.properties.alt_source1.toLowerCase();
+    var alt_source2 = feature.properties.alt_source2.toLowerCase();
+    var alt_confidence = feature.properties.alt_confidence;
+
+    var tkoff1 = feature.properties.fid1_tkoff_icao + " - " + feature.properties.fid1_tkoff_name;
+    var tkoff2 = feature.properties.fid2_tkoff_icao + " - " + feature.properties.fid2_tkoff_name;
 
     var pointsGeoJsonIndex = _.indexOf(_pointsGeojson.features, feature, 0);
+
+    var alt_icon = null;;
+    switch (alt_confidence) {
+        case 3:
+            alt_icon = "green_icon.png";
+            break;
+        case 2:
+            alt_icon = "yellow_icon.png";
+            break;
+        case 1:
+            alt_icon = "red_icon.png";
+            break;
+    }
 
 	return {
 		ts: ts,
@@ -196,9 +232,15 @@ function getFeatureProperties(feature) {
         alt1: alt1,
         alt2: alt2,
         delta: delta,
+        alt_source1: alt_source1,
+        alt_source2: alt_source2,
+        alt_confidence: alt_confidence,
+        alt_icon: alt_icon,
 		dist: dist, 
         fid1: fid1,
-		fid2: fid2,
+        fid2: fid2,
+        tkoff1: tkoff1,
+        tkoff2: tkoff2,
 		pointsGeoJsonIndex: pointsGeoJsonIndex
 };
 
